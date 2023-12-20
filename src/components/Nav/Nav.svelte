@@ -1,6 +1,7 @@
 <script>
 	import { Nav } from 'sveltewind/components';
 	import { twMerge } from 'tailwind-merge';
+	import { page } from '$app/stores';
 	import { A, Card, Overlay } from '$components';
 
 	// props (external)
@@ -10,7 +11,7 @@
 	export const toggle = () => (isOpen = !isOpen);
 
 	// props (internal)
-	const dayCount = 0;
+	const dayCount = 1;
 
 	// props (dyanmic)
 	$: classes = twMerge(
@@ -28,9 +29,15 @@
 	<slot>
 		<Card class="flex-grow rounded-none p-0">
 			{#each [...Array(dayCount)] as _, i}
+				{@const href = `/2023/day-${i + 1}`}
 				<A
-					class={twMerge('px-6 py-2 shadow-[] transition duration-200 hover:bg-primary-500/10')}
-					href="/2023/{i + 1}">Day {i + 1}</A
+					class={twMerge(
+						'whitespace-nowrap px-6 py-2 shadow-[] transition duration-200 hover:bg-primary-500/10',
+						$page.url.pathname === href
+							? 'shadow-[inset_2px_0_#ff3e00] hover:shadow-[inset_2px_0_#ff3e00]'
+							: 'shadow-[inset]'
+					)}
+					{href}>Day {i + 1}</A
 				>
 			{/each}
 		</Card>
